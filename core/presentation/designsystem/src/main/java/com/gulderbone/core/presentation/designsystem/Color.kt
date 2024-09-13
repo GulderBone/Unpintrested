@@ -1,4 +1,4 @@
-package com.gulderbone.unpintrested.ui.theme
+package com.gulderbone.core.presentation.designsystem
 
 import androidx.compose.ui.graphics.Color
 

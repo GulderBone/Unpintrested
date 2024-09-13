@@ -1,6 +1,5 @@
-package com.gulderbone.unpintrested.ui.theme
+package com.gulderbone.core.presentation.designsystem
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

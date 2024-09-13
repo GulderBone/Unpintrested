@@ -24,6 +24,13 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/build-logic/convention" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/presentation" />
+            <option value="$PROJECT_DIR$/core/presentation/designsystem" />
+            <option value="$PROJECT_DIR$/pin" />
+            <option value="$PROJECT_DIR$/pin/data" />
+            <option value="$PROJECT_DIR$/pin/domain" />
+            <option value="$PROJECT_DIR$/pin/presentation" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
