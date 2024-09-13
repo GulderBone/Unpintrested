@@ -1,12 +1,7 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
+        google()
         mavenCentral()
         gradlePluginPortal()
     }
@@ -19,6 +14,8 @@ dependencyResolutionManagement {
     }
 }
 
+gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
+
 rootProject.name = "Unpintrested"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
- 
