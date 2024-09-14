@@ -20,12 +20,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.gulderbone.core.presentation.designsystem.ScreenThemePreviews
 import com.gulderbone.core.presentation.designsystem.UnpintrestedTheme
 
 @Composable
 fun AddPinScreenRoot(
-    viewModel: AddPinViewModel = AddPinViewModel(),
+    viewModel: AddPinViewModel = hiltViewModel(),
 ) {
     AddPinScreen(
         state = viewModel.state,

@@ -9,6 +9,7 @@ class AndroidFeatureUiConventionPlugin : Plugin<Project> {
         target.run {
             pluginManager.run {
                 apply("unpintrested.android.library.compose")
+                apply("unpintrested.android.hilt")
             }
 
             dependencies {
