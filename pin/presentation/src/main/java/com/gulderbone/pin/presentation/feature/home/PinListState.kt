@@ -1,4 +1,4 @@
-package com.gulderbone.pin.presentation.pinlist
+package com.gulderbone.pin.presentation.feature.home
 
 data class PinListState(
     val pins: List<PinUi> = emptyList(),

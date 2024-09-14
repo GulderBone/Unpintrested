@@ -1,4 +1,4 @@
-package com.gulderbone.pin.presentation.pinlist
+package com.gulderbone.pin.presentation.feature.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

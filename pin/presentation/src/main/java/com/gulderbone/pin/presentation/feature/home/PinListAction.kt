@@ -1,4 +1,4 @@
-package com.gulderbone.pin.presentation.pinlist
+package com.gulderbone.pin.presentation.feature.home
 
 sealed interface PinListAction {
     data object AddNewPin : PinListAction
