@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun Pin(
+    name: String,
+    value: String,
     isPinVisible: Boolean,
     onTogglePinVisibility: () -> Unit,
     modifier: Modifier = Modifier,
@@ -28,8 +30,8 @@ fun Pin(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Column {
-            Text(text = "Pin name one")
-            Text(text = "* * * * * *")
+            Text(text = name)
+            Text(text = value)
         }
         IconButton(onClick = onTogglePinVisibility) {
             Icon(
