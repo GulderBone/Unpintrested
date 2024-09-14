@@ -19,3 +19,10 @@ gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:t
 rootProject.name = "Unpintrested"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
+include(":pin:domain")
+include(":pin:presentation")
+include(":pin:data")
+include(":core:presentation:designsystem")
+include(":core:database")
+include(":core:domain")
+include(":core:data")

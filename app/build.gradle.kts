@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.unpintrested.android.application.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -32,9 +33,21 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.ui.tooling)
+
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+
+    implementation(projects.core.domain)
+    implementation(projects.core.data)
+    implementation(projects.core.database)
+    implementation(projects.core.presentation.designsystem)
+
+    implementation(projects.pin.presentation)
+    implementation(projects.pin.domain)
+    implementation(projects.pin.data)
 }
