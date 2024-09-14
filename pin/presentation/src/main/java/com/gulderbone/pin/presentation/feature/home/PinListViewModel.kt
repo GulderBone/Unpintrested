@@ -18,25 +18,22 @@ class PinListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            pinRepository.upsertPin(
+            pinRepository.insertPin(
                 Pin(
-                    id = null,
                     name = "test",
-                    value = "1 2 3 4 5 6",
+                    value = 123456,
                 )
             )
-            pinRepository.upsertPin(
+            pinRepository.insertPin(
                 Pin(
-                    id = null,
                     name = "test2",
-                    value = "1 2 3 4 5 6",
+                    value = 420690,
                 )
             )
-            pinRepository.upsertPin(
+            pinRepository.insertPin(
                 Pin(
-                    id = null,
                     name = "test3",
-                    value = "1 2 3 4 5 6",
+                    value = 123456,
                 )
             )
         }

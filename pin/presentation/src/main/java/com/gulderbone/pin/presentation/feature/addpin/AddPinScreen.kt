@@ -1,5 +1,6 @@
 package com.gulderbone.pin.presentation.feature.addpin
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,25 +19,45 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gulderbone.core.presentation.designsystem.ScreenThemePreviews
 import com.gulderbone.core.presentation.designsystem.UnpintrestedTheme
+import com.gulderbone.core.presentation.ui.ObserveAsEvents
 
 @Composable
 fun AddPinScreenRoot(
+    onPinAdded: () -> Unit,
     viewModel: AddPinViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    ObserveAsEvents(viewModel.events) { event ->
+        when (event) {
+            is AddPinEvent.Error -> {
+                Toast.makeText(
+                    context,
+                    event.error.asString(context),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            is AddPinEvent.PinAdded -> {
+                keyboardController?.hide()
+                onPinAdded()
+            }
+        }
+    }
+
     AddPinScreen(
-        state = viewModel.state,
         onAction = viewModel::onAction
     )
 }
 
 @Composable
 private fun AddPinScreen(
-    state: AddPinState,
     onAction: (AddPinAction) -> Unit,
 ) {
     var pinName by rememberSaveable { mutableStateOf("") }
@@ -75,7 +96,14 @@ private fun AddPinScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { onAction(AddPinAction.onAddPinClick) }
+            onClick = {
+                onAction(
+                    AddPinAction.OnAddPinClick(
+                        name = pinName,
+                        value = pinValue,
+                    )
+                )
+            }
         ) {
             Text("Add new pin")
         }
@@ -87,7 +115,6 @@ private fun AddPinScreen(
 private fun AddPinScreenPreview() {
     UnpintrestedTheme {
         AddPinScreen(
-            state = AddPinState(),
             onAction = {}
         )
     }

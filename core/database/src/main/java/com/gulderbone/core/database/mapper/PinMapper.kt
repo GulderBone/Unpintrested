@@ -8,7 +8,6 @@ internal class PinMapper @Inject constructor() {
 
     fun from(entity: PinEntity) = with(entity) {
         Pin(
-            id = id,
             name = name,
             value = value,
         )

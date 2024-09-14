@@ -10,7 +10,6 @@ internal class PinEntityMapper @Inject constructor() {
         PinEntity(
             name = name,
             value = value,
-            id = id ?: 0L,
         )
     }
 }

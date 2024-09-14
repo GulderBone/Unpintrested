@@ -1,12 +1,16 @@
 package com.gulderbone.core.database
 
+import android.database.sqlite.SQLiteConstraintException
 import com.gulderbone.core.database.dao.PinDao
 import com.gulderbone.core.database.mapper.PinEntityMapper
 import com.gulderbone.core.database.mapper.PinMapper
 import com.gulderbone.core.domain.pin.LocalPinDataSource
 import com.gulderbone.core.domain.pin.Pin
+import com.gulderbone.core.domain.util.DatabaseError
+import com.gulderbone.core.domain.util.EmptyResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import com.gulderbone.core.domain.util.Result
 import javax.inject.Inject
 
 internal class RoomLocalPinDataSource @Inject constructor(
@@ -21,13 +25,13 @@ internal class RoomLocalPinDataSource @Inject constructor(
             pins.map(pinMapper::from)
         }
 
-    override suspend fun upsertPin(pin: Pin): Result<Unit> = try {
+    override suspend fun insertPin(pin: Pin): EmptyResult<DatabaseError> = try {
         val entity = pinEntityMapper.from(pin)
-        pinDao.upsertPin(entity)
-        Result.success(Unit)
-    } catch (e: Exception) {
-        Result.failure(e)
+        pinDao.insertPin(entity)
+        Result.Success(Unit)
+    } catch (e: SQLiteConstraintException) {
+        Result.Error(DatabaseError.AlreadyExists)
     }
 
-    override suspend fun deletePin(id: Long) = pinDao.deletePin(id)
+    override suspend fun deletePin(name: String) = pinDao.deletePin(name)
 }

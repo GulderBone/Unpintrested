@@ -1,9 +1,11 @@
 package com.gulderbone.core.domain.pin
 
+import com.gulderbone.core.domain.util.DatabaseError
+import com.gulderbone.core.domain.util.EmptyResult
 import kotlinx.coroutines.flow.Flow
 
 interface LocalPinDataSource {
     fun getPins(): Flow<List<Pin>>
-    suspend fun upsertPin(pin: Pin): Result<Unit>
-    suspend fun deletePin(id: Long)
+    suspend fun insertPin(pin: Pin): EmptyResult<DatabaseError>
+    suspend fun deletePin(name: String)
 }

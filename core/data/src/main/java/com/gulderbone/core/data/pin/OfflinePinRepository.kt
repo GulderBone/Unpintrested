@@ -3,27 +3,18 @@ package com.gulderbone.core.data.pin
 import com.gulderbone.core.domain.pin.LocalPinDataSource
 import com.gulderbone.core.domain.pin.Pin
 import com.gulderbone.core.domain.pin.PinRepository
-import kotlinx.coroutines.CoroutineScope
+import com.gulderbone.core.domain.util.DatabaseError
+import com.gulderbone.core.domain.util.EmptyResult
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class OfflinePinRepository @Inject constructor(
     private val localPinDataSource: LocalPinDataSource,
-    private val applicationScope: CoroutineScope,
 ) : PinRepository {
 
     override fun getPins(): Flow<List<Pin>> = localPinDataSource.getPins()
 
-    override suspend fun upsertPin(pin: Pin) {
-        applicationScope.launch {
-            localPinDataSource.upsertPin(pin)
-        }
-    }
+    override suspend fun insertPin(pin: Pin): EmptyResult<DatabaseError> = localPinDataSource.insertPin(pin)
 
-    override suspend fun deletePin(id: Long) {
-        applicationScope.launch {
-            localPinDataSource.deletePin(id)
-        }
-    }
+    override suspend fun deletePin(name: String) = localPinDataSource.deletePin(name)
 }

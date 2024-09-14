@@ -24,7 +24,11 @@ fun NavigationRoot(
             )
         }
         composable<AddPin> {
-            AddPinScreenRoot()
+            AddPinScreenRoot(
+                onPinAdded = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
