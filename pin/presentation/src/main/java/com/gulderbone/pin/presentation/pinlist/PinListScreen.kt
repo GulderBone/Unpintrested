@@ -28,7 +28,7 @@ fun PinListScreenRoot(
 @Composable
 private fun PinListScreen(
     state: PinListState,
-    onAction: () -> Unit,
+    onAction: (PinListAction) -> Unit,
 ) {
     Column(
         modifier = Modifier

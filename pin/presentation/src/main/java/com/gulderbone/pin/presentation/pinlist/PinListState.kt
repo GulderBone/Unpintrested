@@ -5,6 +5,8 @@ data class PinListState(
 )
 
 data class PinUi(
-    val id: String,
-    val title: String,
+    val id: Int,
+    val name: String,
+    val pin: String,
+    val isVisible: Boolean = false,
 )
