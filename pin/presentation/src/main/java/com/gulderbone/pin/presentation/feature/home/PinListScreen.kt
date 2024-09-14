@@ -28,7 +28,7 @@ fun PinListScreenRoot(
         state = viewModel.state,
         onAction = { action ->
             when (action) {
-                PinListAction.AddNewPin -> onAddPinClick()
+                PinListAction.AddNewPinClicked -> onAddPinClick()
                 else -> viewModel.onAction(action)
             }
         }
@@ -61,13 +61,14 @@ private fun PinListScreen(
                     name = pin.name,
                     value = pin.pin,
                     isPinVisible = pin.isVisible,
-                    onTogglePinVisibility = { onAction(PinListAction.PinVisibilityChanged(pin.id, pin.isVisible)) }
+                    onTogglePinVisibility = { onAction(PinListAction.PinVisibilityChanged(pin.name, !pin.isVisible)) },
+                    onDelete = { onAction(PinListAction.DeletePinClicked(pin.name)) }
                 )
             }
         }
         Button(
             onClick = {
-                onAction(PinListAction.AddNewPin)
+                onAction(PinListAction.AddNewPinClicked)
             }) {
             Text("Add new pin")
         }
@@ -79,7 +80,7 @@ private fun PinListScreen(
 private fun PinListScreenPreview() {
     UnpintrestedTheme {
         PinListScreen(
-            state = PinListState(pins = initialPins),
+            state = PinListState(),
             onAction = {}
         )
     }

@@ -16,5 +16,5 @@ class OfflinePinRepository @Inject constructor(
 
     override suspend fun insertPin(pin: Pin): EmptyResult<DatabaseError> = localPinDataSource.insertPin(pin)
 
-    override suspend fun deletePin(name: String) = localPinDataSource.deletePin(name)
+    override suspend fun deletePin(name: String): EmptyResult<DatabaseError> = localPinDataSource.deletePin(name)
 }

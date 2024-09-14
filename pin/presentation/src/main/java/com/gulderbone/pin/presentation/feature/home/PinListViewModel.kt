@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gulderbone.core.domain.pin.Pin
 import com.gulderbone.core.domain.pin.PinRepository
+import com.gulderbone.core.domain.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,7 +15,11 @@ import javax.inject.Inject
 @HiltViewModel
 class PinListViewModel @Inject constructor(
     private val pinRepository: PinRepository,
+    private val pinUiMapper: PinUiMapper,
 ) : ViewModel() {
+
+    var state by mutableStateOf(PinListState())
+        private set
 
     init {
         viewModelScope.launch {
@@ -36,35 +41,37 @@ class PinListViewModel @Inject constructor(
                     value = 123456,
                 )
             )
+            pinRepository.getPins().collect { pins ->
+                state = state.copy(pins = pins.map(pinUiMapper::from))
+            }
         }
     }
-
-    var state by mutableStateOf(PinListState(pins = initialPins))
-        private set
 
     fun onAction(action: PinListAction) {
         when (action) {
-            PinListAction.AddNewPin -> {}
-            is PinListAction.PinVisibilityChanged -> {}
+            is PinListAction.PinVisibilityChanged -> {
+                state = state.copy(pins = state.pins.map {
+                    if (it.name == action.pinName) {
+                        it.copy(isVisible = action.isVisible)
+                    } else {
+                        it
+                    }
+                })
+            }
+            is PinListAction.DeletePinClicked -> {
+                onDeletePinClicked(action)
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun onDeletePinClicked(action: PinListAction.DeletePinClicked) {
+        viewModelScope.launch {
+            val result = pinRepository.deletePin(action.pinName)
+            if (result is Result.Success) {
+                state = state.copy(pins = state.pins.filter { it.name != action.pinName })
+            }
         }
     }
 }
-
-val initialPins = listOf(
-    PinUi(1, "Pin name one", "1 2 3 4 5 6", true),
-    PinUi(2, "Pin name two", "4 2 0 6 9", true),
-    PinUi(3, "Pin name three", "* * * * * *", false),
-    PinUi(4, "Pin name four", "* * * * * *", false),
-    PinUi(5, "Pin name five", "* * * * * *", false),
-    PinUi(6, "Pin name six", "* * * * * *", false),
-    PinUi(7, "Pin name seven", "* * * * * *", false),
-    PinUi(8, "Pin name eight", "* * * * * *", false),
-    PinUi(9, "Pin name nine", "* * * * * *", false),
-    PinUi(10, "Pin name ten", "* * * * * *", false),
-    PinUi(11, "Pin name eleven", "* * * * * *", false),
-    PinUi(12, "Pin name twelve", "* * * * * *", false),
-    PinUi(13, "Pin name thirteen", "* * * * * *", false),
-    PinUi(14, "Pin name fourteen", "* * * * * *", false),
-    PinUi(15, "Pin name fifteen", "* * * * * *", false),
-    PinUi(16, "Pin name sixteen", "* * * * * *", false),
-)

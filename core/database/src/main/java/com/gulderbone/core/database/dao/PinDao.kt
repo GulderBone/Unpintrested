@@ -13,7 +13,7 @@ internal interface PinDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertPin(pin: PinEntity)
 
-    @Query("SELECT * FROM pinentity ORDER BY name DESC")
+    @Query("SELECT * FROM pinentity ORDER BY name ASC")
     fun getPins(): Flow<List<PinEntity>>
 
     @Query("DELETE FROM pinentity WHERE name = :name")
