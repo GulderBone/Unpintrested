@@ -42,7 +42,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
 
-
+    implementation(projects.core.domain)
+    implementation(projects.core.data)
+    implementation(projects.core.database)
     implementation(projects.core.presentation.designsystem)
 
     implementation(projects.pin.presentation)

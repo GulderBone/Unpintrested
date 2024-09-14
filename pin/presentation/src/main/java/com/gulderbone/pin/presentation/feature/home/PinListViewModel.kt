@@ -4,11 +4,43 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.gulderbone.core.domain.pin.Pin
+import com.gulderbone.core.domain.pin.PinRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PinListViewModel @Inject constructor() : ViewModel() {
+class PinListViewModel @Inject constructor(
+    private val pinRepository: PinRepository,
+) : ViewModel() {
+
+    init {
+        viewModelScope.launch {
+            pinRepository.upsertPin(
+                Pin(
+                    id = null,
+                    name = "test",
+                    value = "1 2 3 4 5 6",
+                )
+            )
+            pinRepository.upsertPin(
+                Pin(
+                    id = null,
+                    name = "test2",
+                    value = "1 2 3 4 5 6",
+                )
+            )
+            pinRepository.upsertPin(
+                Pin(
+                    id = null,
+                    name = "test3",
+                    value = "1 2 3 4 5 6",
+                )
+            )
+        }
+    }
 
     var state by mutableStateOf(PinListState(pins = initialPins))
         private set

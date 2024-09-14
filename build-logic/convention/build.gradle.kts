@@ -45,6 +45,10 @@ gradlePlugin {
             id = "unpintrested.android.feature.ui"
             implementationClass = "AndroidFeatureUiConventionPlugin"
         }
+        register("androidRoom") {
+            id = "unpintrested.android.room"
+            implementationClass = "AndroidRoomConventionPlugin"
+        }
         register("androidHilt") {
             id = "unpintrested.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"

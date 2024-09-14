@@ -57,7 +57,7 @@ private fun PinListScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(state.pins) { pin ->
-                Pin(
+                PinCard(
                     name = pin.name,
                     value = pin.pin,
                     isPinVisible = pin.isVisible,
