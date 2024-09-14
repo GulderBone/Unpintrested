@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface PinRepository {
     fun getPins(): Flow<List<Pin>>
     suspend fun insertPin(pin: Pin): EmptyResult<DatabaseError>
-    suspend fun deletePin(name: String)
+    suspend fun deletePin(name: String): EmptyResult<DatabaseError>
 }

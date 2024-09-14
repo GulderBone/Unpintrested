@@ -12,3 +12,7 @@ val EyeClosedIcon: ImageVector
 val EyeOpenedIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.eye_opened)
+
+val TrashIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.delete)

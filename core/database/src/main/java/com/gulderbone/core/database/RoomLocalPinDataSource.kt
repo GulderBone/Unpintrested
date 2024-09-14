@@ -8,9 +8,9 @@ import com.gulderbone.core.domain.pin.LocalPinDataSource
 import com.gulderbone.core.domain.pin.Pin
 import com.gulderbone.core.domain.util.DatabaseError
 import com.gulderbone.core.domain.util.EmptyResult
+import com.gulderbone.core.domain.util.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import com.gulderbone.core.domain.util.Result
 import javax.inject.Inject
 
 internal class RoomLocalPinDataSource @Inject constructor(
@@ -33,5 +33,10 @@ internal class RoomLocalPinDataSource @Inject constructor(
         Result.Error(DatabaseError.AlreadyExists)
     }
 
-    override suspend fun deletePin(name: String) = pinDao.deletePin(name)
+    override suspend fun deletePin(name: String): EmptyResult<DatabaseError> = try {
+        pinDao.deletePin(name)
+        Result.Success(Unit)
+    } catch (e: Exception) {
+        Result.Error(DatabaseError.Unknown)
+    }
 }
