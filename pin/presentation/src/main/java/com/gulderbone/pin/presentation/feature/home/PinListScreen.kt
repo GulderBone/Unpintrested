@@ -18,20 +18,25 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gulderbone.core.presentation.designsystem.ScreenThemePreviews
 import com.gulderbone.core.presentation.designsystem.UnpintrestedTheme
+import com.gulderbone.core.presentation.ui.ObserveAsEvents
 
 @Composable
 fun PinListScreenRoot(
     onAddPinClick: () -> Unit,
     viewModel: PinListViewModel = hiltViewModel(),
 ) {
-    PinListScreen(
-        state = viewModel.state,
-        onAction = { action ->
-            when (action) {
-                PinListAction.AddNewPinClicked -> onAddPinClick()
-                else -> viewModel.onAction(action)
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when (event) {
+            is PinListEvent.PinAdded -> {
+                onAddPinClick()
             }
         }
+    }
+
+    PinListScreen(
+        state = viewModel.state,
+        onAction = viewModel::onAction
     )
 }
 

@@ -7,4 +7,6 @@
     <string name="pin_name_label">Pin name</string>
     <string name="pin_name_placeholder">My locker pin</string>
     <string name="create_pin">Create Pin</string>
+    <string name="add_pin">Add Pin</string>
+    <string name="close">Close</string>
 </resources>

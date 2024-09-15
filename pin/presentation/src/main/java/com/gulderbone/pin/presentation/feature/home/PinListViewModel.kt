@@ -5,10 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gulderbone.core.domain.pin.Pin
 import com.gulderbone.core.domain.pin.PinRepository
 import com.gulderbone.core.domain.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,26 +22,11 @@ class PinListViewModel @Inject constructor(
     var state by mutableStateOf(PinListState())
         private set
 
+    private val eventChannel = Channel<PinListEvent>()
+    val events = eventChannel.receiveAsFlow()
+
     init {
         viewModelScope.launch {
-            pinRepository.insertPin(
-                Pin(
-                    name = "test",
-                    value = 123456,
-                )
-            )
-            pinRepository.insertPin(
-                Pin(
-                    name = "test2",
-                    value = 420690,
-                )
-            )
-            pinRepository.insertPin(
-                Pin(
-                    name = "test3",
-                    value = 123456,
-                )
-            )
             pinRepository.getPins().collect { pins ->
                 state = state.copy(pins = pins.map(pinUiMapper::from))
             }
@@ -49,6 +35,12 @@ class PinListViewModel @Inject constructor(
 
     fun onAction(action: PinListAction) {
         when (action) {
+            is PinListAction.AddNewPinClicked -> {
+                viewModelScope.launch {
+                    eventChannel.send(PinListEvent.PinAdded)
+                }
+            }
+
             is PinListAction.PinVisibilityChanged -> {
                 state = state.copy(pins = state.pins.map {
                     if (it.name == action.pinName) {
@@ -58,11 +50,10 @@ class PinListViewModel @Inject constructor(
                     }
                 })
             }
+
             is PinListAction.DeletePinClicked -> {
                 onDeletePinClicked(action)
             }
-
-            else -> {}
         }
     }
 

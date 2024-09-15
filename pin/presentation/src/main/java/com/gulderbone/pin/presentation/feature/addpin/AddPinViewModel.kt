@@ -29,29 +29,45 @@ class AddPinViewModel @Inject constructor(
     val events = eventChannel.receiveAsFlow()
 
     init {
-        state = state.copy(pin = generatePin())
+        state = state.copy(
+            pin = generatePin(),
+            canAdd = state.name.isNotBlank()
+        )
     }
 
     fun onAction(action: AddPinAction) {
         when (action) {
+            is AddPinAction.OnPinNameChange -> {
+                state = state.copy(
+                    name = action.name,
+                    canAdd = action.name.isNotBlank()
+                )
+            }
+
             is AddPinAction.OnAddPinClick -> {
                 viewModelScope.launch {
                     val result = pinRepository.insertPin(
                         Pin(
-                            name = action.name,
-                            value = action.value,
+                            name = state.name,
+                            value = state.pin,
                         )
                     )
-                    when(result) {
+                    when (result) {
                         is Result.Success -> eventChannel.send(AddPinEvent.PinAdded)
                         is Result.Error -> {
-                            val error = when(result.error) {
+                            val error = when (result.error) {
                                 is DatabaseError.AlreadyExists -> AddPinError.PinAlreadyExists.asUiText()
                                 else -> AddPinError.UnknownError.asUiText()
                             }
                             eventChannel.send(AddPinEvent.Error(error))
                         }
                     }
+                }
+            }
+
+            is AddPinAction.OnExit -> {
+                viewModelScope.launch {
+                    eventChannel.send(AddPinEvent.Exit)
                 }
             }
         }

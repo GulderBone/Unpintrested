@@ -27,6 +27,9 @@ fun NavigationRoot(
             AddPinScreenRoot(
                 onPinAdded = {
                     navController.popBackStack()
+                },
+                onExit = {
+                    navController.popBackStack()
                 }
             )
         }

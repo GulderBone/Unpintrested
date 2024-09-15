@@ -27,8 +27,14 @@ fun PinCard(
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val formattedPinValue = if (isPinVisible) {
+        value.toCharArray().joinToString(" ")
+    } else {
+        "* * * * * *"
+    }
+
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
             .wrapContentHeight(),
@@ -36,13 +42,7 @@ fun PinCard(
     ) {
         Column {
             Text(text = name)
-            Text(
-                text = if (isPinVisible) {
-                    value
-                } else {
-                    "* * * * * *"
-                }
-            )
+            Text(text = formattedPinValue)
         }
         Row {
             IconButton(onClick = onTogglePinVisibility) {
@@ -75,7 +75,7 @@ fun PinCardPreview() {
     UnpintrestedTheme {
         PinCard(
             name = "Name",
-            value = "Value",
+            value = "123456",
             isPinVisible = true,
             onTogglePinVisibility = {},
             onDelete = {},
