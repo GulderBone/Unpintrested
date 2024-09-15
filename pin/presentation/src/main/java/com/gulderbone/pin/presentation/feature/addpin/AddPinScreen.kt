@@ -2,6 +2,7 @@ package com.gulderbone.pin.presentation.feature.addpin
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +14,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -21,8 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gulderbone.core.presentation.designsystem.ScreenThemePreviews
 import com.gulderbone.core.presentation.designsystem.UnpintrestedTheme
@@ -44,6 +48,7 @@ fun AddPinScreenRoot(
                     Toast.LENGTH_LONG
                 ).show()
             }
+
             is AddPinEvent.PinAdded -> {
                 keyboardController?.hide()
                 onPinAdded()
@@ -52,16 +57,18 @@ fun AddPinScreenRoot(
     }
 
     AddPinScreen(
+        state = viewModel.state,
         onAction = viewModel::onAction
     )
 }
 
 @Composable
 private fun AddPinScreen(
+    state: AddPinState,
     onAction: (AddPinAction) -> Unit,
 ) {
     var pinName by rememberSaveable { mutableStateOf("") }
-    var pinValue by rememberSaveable { mutableIntStateOf(0) }
+    val pinValue by rememberSaveable { mutableLongStateOf(state.pin) }
 
     Column(
         modifier = Modifier
@@ -70,6 +77,35 @@ private fun AddPinScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Name Your new Pin",
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center,
+            )
+        }
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "Generated Pin number",
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = pinValue.toString(),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 4.sp,
+                textAlign = TextAlign.Center,
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = pinName,
@@ -82,30 +118,19 @@ private fun AddPinScreen(
             )
 
         )
-        Spacer(modifier = Modifier.height(4.dp))
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = pinValue.toString(),
-            onValueChange = { pinValue = it.toInt() },
-            singleLine = true,
-            label = { Text("Pin value") },
-            placeholder = { Text("1 2 3 4 5 6") },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.NumberPassword
-            ),
-        )
+
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
                 onAction(
                     AddPinAction.OnAddPinClick(
                         name = pinName,
-                        value = pinValue,
+                        value = state.pin,
                     )
                 )
             }
         ) {
-            Text("Add new pin")
+            Text("Create Pin")
         }
     }
 }
@@ -115,6 +140,7 @@ private fun AddPinScreen(
 private fun AddPinScreenPreview() {
     UnpintrestedTheme {
         AddPinScreen(
+            state = AddPinState(pin = 123456),
             onAction = {}
         )
     }

@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 internal data class PinEntity(
     @PrimaryKey(autoGenerate = false)
     val name: String,
-    val value: Int,
+    val value: Long,
 )
