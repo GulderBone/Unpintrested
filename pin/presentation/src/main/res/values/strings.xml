@@ -2,4 +2,9 @@
 <resources>
     <string name="pin_already_exists">Pin already exists</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="generated_pin_number">Generated Pin number</string>
+    <string name="name_your_new_pin">Name Your new Pin</string>
+    <string name="pin_name_label">Pin name</string>
+    <string name="pin_name_placeholder">My locker pin</string>
+    <string name="create_pin">Create Pin</string>
 </resources>
