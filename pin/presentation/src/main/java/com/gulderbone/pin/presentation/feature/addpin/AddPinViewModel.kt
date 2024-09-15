@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddPinViewModel @Inject constructor(
     private val pinRepository: PinRepository,
-    private val pinGenerator: PinGenerator,
+    pinGenerator: PinGenerator,
 ) : ViewModel() {
 
     var state by mutableStateOf(AddPinState())
@@ -30,7 +30,7 @@ class AddPinViewModel @Inject constructor(
 
     init {
         state = state.copy(
-            pin = generatePin(),
+            pin = pinGenerator.generate(),
             canAdd = state.name.isNotBlank()
         )
     }
@@ -72,6 +72,4 @@ class AddPinViewModel @Inject constructor(
             }
         }
     }
-
-    private fun generatePin(): Long = pinGenerator.generate()
 }
