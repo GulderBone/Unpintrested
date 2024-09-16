@@ -2,6 +2,8 @@
 
 package com.gulderbone.pin.presentation.feature.home
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,9 +37,14 @@ fun PinListScreenRoot(
     onAddPinClick: () -> Unit,
     viewModel: PinListViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
+            is PinListEvent.Error -> {
+                displayErrorToast(context, event)
+            }
+
             is PinListEvent.PinAdded -> {
                 onAddPinClick()
             }
@@ -105,6 +113,14 @@ private fun PinListScreen(
             }
         }
     }
+}
+
+private fun displayErrorToast(context: Context, event: PinListEvent.Error) {
+    Toast.makeText(
+        context,
+        event.error.asString(context),
+        Toast.LENGTH_LONG
+    ).show()
 }
 
 @ScreenThemePreviews

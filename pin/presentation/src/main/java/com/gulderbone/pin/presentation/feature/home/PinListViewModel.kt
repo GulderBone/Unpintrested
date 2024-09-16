@@ -78,13 +78,23 @@ class PinListViewModel @Inject constructor(
     private fun deletePin(pinName: String) {
         viewModelScope.launch {
             val result = pinRepository.deletePin(pinName)
-            if (result is Result.Success) {
-                state = state.copy(pins = state.pins.filter { it.name != pinName })
+            state = when (result) {
+                is Result.Success -> {
+                    state.copy(
+                        pins = state.pins.filter { it.name != pinName },
+                        isDeleting = false,
+                        deletedPinName = ""
+                    )
+                }
+
+                is Result.Error -> {
+                    eventChannel.send(PinListEvent.Error(PinListError.DeletingFailed.asUiText()))
+                    state.copy(
+                        isDeleting = false,
+                        deletedPinName = ""
+                    )
+                }
             }
-            state = state.copy(
-                isDeleting = false,
-                deletedPinName = ""
-            )
         }
     }
 }
