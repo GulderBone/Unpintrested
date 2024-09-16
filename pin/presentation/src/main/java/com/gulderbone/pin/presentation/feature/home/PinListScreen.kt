@@ -75,7 +75,8 @@ private fun PinListScreen(
                     value = pin.pin,
                     isPinVisible = pin.isMasked,
                     onTogglePinVisibility = { onAction(PinListAction.PinVisibilityChanged(pin.name, !pin.isMasked)) },
-                    onDelete = { onAction(PinListAction.DeletePinClicked(pin.name)) }
+                    onDelete = { onAction(PinListAction.DeletePinClicked(pin.name)) },
+                    modifier = Modifier.animateItem()
                 )
             }
         }
@@ -93,7 +94,13 @@ private fun PinListScreen(
 private fun PinListScreenPreview() {
     UnpintrestedTheme {
         PinListScreen(
-            state = PinListState(),
+            state = PinListState(
+                pins = listOf(
+                    PinUi("My Locker", "123456", false),
+                    PinUi("Tinder", "123456", true),
+                    PinUi("Secret", "123456", false),
+                ),
+            ),
             onAction = {}
         )
     }

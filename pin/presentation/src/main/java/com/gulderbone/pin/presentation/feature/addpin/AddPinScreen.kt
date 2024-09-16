@@ -61,6 +61,15 @@ fun AddPinScreenRoot(
                 displayErrorToast(context, event)
             }
 
+            is AddPinEvent.PinAdded -> {
+                Toast.makeText(
+                    context,
+                    "Pin added: ${event.pinName}",
+                    Toast.LENGTH_LONG
+                ).show()
+                onExit()
+            }
+
             is AddPinEvent.Exit -> {
                 keyboardController?.hide()
                 onExit()
@@ -74,6 +83,7 @@ fun AddPinScreenRoot(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AddPinScreen(
     state: AddPinState,
