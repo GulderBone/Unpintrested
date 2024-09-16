@@ -60,7 +60,7 @@ class AddPinViewModel @Inject constructor(
                 )
             )
             when (result) {
-                is Result.Success -> eventChannel.send(AddPinEvent.PinAdded)
+                is Result.Success -> eventChannel.send(AddPinEvent.Exit)
                 is Result.Error -> {
                     val error = when (result.error) {
                         is DatabaseError.AlreadyExists -> AddPinError.PinAlreadyExists.asUiText()

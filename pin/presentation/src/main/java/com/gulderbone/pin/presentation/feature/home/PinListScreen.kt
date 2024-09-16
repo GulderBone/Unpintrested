@@ -45,6 +45,14 @@ private fun PinListScreen(
     state: PinListState,
     onAction: (PinListAction) -> Unit,
 ) {
+    if (state.isDeleting) {
+        DeletePinDialog(
+            pinName = state.deletedPinName,
+            onConfirm = { onAction(PinListAction.DeletePinConfirmed) },
+            onDismiss = { onAction(PinListAction.DeletePinDismissed) }
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()

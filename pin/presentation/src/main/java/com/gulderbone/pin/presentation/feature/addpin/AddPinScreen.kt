@@ -50,7 +50,6 @@ import com.gulderbone.pin.presentation.R
 
 @Composable
 fun AddPinScreenRoot(
-    onPinAdded: () -> Unit,
     onExit: () -> Unit,
     viewModel: AddPinViewModel = hiltViewModel(),
 ) {
@@ -62,12 +61,8 @@ fun AddPinScreenRoot(
                 displayErrorToast(context, event)
             }
 
-            is AddPinEvent.PinAdded -> {
-                keyboardController?.hide()
-                onPinAdded()
-            }
-
             is AddPinEvent.Exit -> {
+                keyboardController?.hide()
                 onExit()
             }
         }

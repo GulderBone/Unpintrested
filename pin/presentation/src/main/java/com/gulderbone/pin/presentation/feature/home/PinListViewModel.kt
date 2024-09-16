@@ -41,6 +41,17 @@ class PinListViewModel @Inject constructor(
                 }
             }
 
+            is PinListAction.DeletePinConfirmed -> {
+                deletePin(state.deletedPinName)
+            }
+
+            is PinListAction.DeletePinDismissed -> {
+                state = state.copy(
+                    isDeleting = false,
+                    deletedPinName = ""
+                )
+            }
+
             is PinListAction.PinVisibilityChanged -> {
                 state = state.copy(pins = state.pins.map {
                     if (it.name == action.pinName) {
@@ -52,17 +63,24 @@ class PinListViewModel @Inject constructor(
             }
 
             is PinListAction.DeletePinClicked -> {
-                onDeletePinClicked(action)
+                state = state.copy(
+                    isDeleting = true,
+                    deletedPinName = action.pinName
+                )
             }
         }
     }
 
-    private fun onDeletePinClicked(action: PinListAction.DeletePinClicked) {
+    private fun deletePin(pinName: String) {
         viewModelScope.launch {
-            val result = pinRepository.deletePin(action.pinName)
+            val result = pinRepository.deletePin(pinName)
             if (result is Result.Success) {
-                state = state.copy(pins = state.pins.filter { it.name != action.pinName })
+                state = state.copy(pins = state.pins.filter { it.name != pinName })
             }
+            state = state.copy(
+                isDeleting = false,
+                deletedPinName = ""
+            )
         }
     }
 }

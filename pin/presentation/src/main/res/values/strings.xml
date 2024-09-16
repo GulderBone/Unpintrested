@@ -9,4 +9,8 @@
     <string name="create_pin">Create Pin</string>
     <string name="add_pin">Add Pin</string>
     <string name="close">Close</string>
+    <string name="delete_pin_confirmation">Are you sure you want to delete this pin?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_pin">Delete \"%1$s\"</string>
 </resources>

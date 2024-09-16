@@ -25,9 +25,6 @@ fun NavigationRoot(
         }
         composable<AddPin> {
             AddPinScreenRoot(
-                onPinAdded = {
-                    navController.popBackStack()
-                },
                 onExit = {
                     navController.popBackStack()
                 }
