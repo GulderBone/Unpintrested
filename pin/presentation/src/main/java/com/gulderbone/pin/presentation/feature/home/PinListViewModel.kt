@@ -44,7 +44,7 @@ class PinListViewModel @Inject constructor(
             is PinListAction.PinVisibilityChanged -> {
                 state = state.copy(pins = state.pins.map {
                     if (it.name == action.pinName) {
-                        it.copy(isVisible = action.isVisible)
+                        it.copy(isMasked = action.isVisible)
                     } else {
                         it
                     }

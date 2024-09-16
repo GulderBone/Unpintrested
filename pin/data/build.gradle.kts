@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.unpintrested.android.library)
+    alias(libs.plugins.unpintrested.android.hilt)
 }
 
 android {

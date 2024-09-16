@@ -6,6 +6,7 @@ data class PinListState(
 
 data class PinUi(
     val name: String,
-    val pin: String, // TODO: do not keep as string for security reasons
-    val isVisible: Boolean = false,
+    // TODO: Not safe, string is immutable and kept in the memory until replaced
+    val pin: String,
+    val isMasked: Boolean = false,
 )

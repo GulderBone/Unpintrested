@@ -2,6 +2,7 @@
 
 package com.gulderbone.pin.presentation.feature.addpin
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -58,11 +59,7 @@ fun AddPinScreenRoot(
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
             is AddPinEvent.Error -> {
-                Toast.makeText(
-                    context,
-                    event.error.asString(context),
-                    Toast.LENGTH_LONG
-                ).show()
+                displayErrorToast(context, event)
             }
 
             is AddPinEvent.PinAdded -> {
@@ -179,6 +176,14 @@ private fun GeneratedPinUi(pinValue: Long) {
             color = MaterialTheme.colorScheme.onPrimaryContainer,
         )
     }
+}
+
+private fun displayErrorToast(context: Context, event: AddPinEvent.Error) {
+    Toast.makeText(
+        context,
+        event.error.asString(context),
+        Toast.LENGTH_LONG
+    ).show()
 }
 
 @ScreenThemePreviews

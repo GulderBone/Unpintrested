@@ -9,7 +9,7 @@ class PinUiMapper @Inject constructor() {
         PinUi(
             name = name,
             pin = value.toString(),
-            isVisible = false,
+            isMasked = false,
         )
     }
 }

@@ -23,7 +23,6 @@ internal object DatabaseModule {
         ).build()
     }
 
-    @Singleton
     @Provides
     fun providePinDao(pinDatabase: PinDatabase) = pinDatabase.pinDao
 }

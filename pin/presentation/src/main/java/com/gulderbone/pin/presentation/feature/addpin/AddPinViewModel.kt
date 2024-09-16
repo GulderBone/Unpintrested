@@ -22,18 +22,13 @@ class AddPinViewModel @Inject constructor(
     pinGenerator: PinGenerator,
 ) : ViewModel() {
 
-    var state by mutableStateOf(AddPinState())
+    var state by mutableStateOf(
+        AddPinState(pin = pinGenerator.generate())
+    )
         private set
 
     private val eventChannel = Channel<AddPinEvent>()
     val events = eventChannel.receiveAsFlow()
-
-    init {
-        state = state.copy(
-            pin = pinGenerator.generate(),
-            canAdd = state.name.isNotBlank()
-        )
-    }
 
     fun onAction(action: AddPinAction) {
         when (action) {
@@ -45,29 +40,33 @@ class AddPinViewModel @Inject constructor(
             }
 
             is AddPinAction.OnAddPinClick -> {
-                viewModelScope.launch {
-                    val result = pinRepository.insertPin(
-                        Pin(
-                            name = state.name,
-                            value = state.pin,
-                        )
-                    )
-                    when (result) {
-                        is Result.Success -> eventChannel.send(AddPinEvent.PinAdded)
-                        is Result.Error -> {
-                            val error = when (result.error) {
-                                is DatabaseError.AlreadyExists -> AddPinError.PinAlreadyExists.asUiText()
-                                else -> AddPinError.UnknownError.asUiText()
-                            }
-                            eventChannel.send(AddPinEvent.Error(error))
-                        }
-                    }
-                }
+                insertPin()
             }
 
             is AddPinAction.OnExit -> {
                 viewModelScope.launch {
                     eventChannel.send(AddPinEvent.Exit)
+                }
+            }
+        }
+    }
+
+    private fun insertPin() {
+        viewModelScope.launch {
+            val result = pinRepository.insertPin(
+                Pin(
+                    name = state.name,
+                    value = state.pin,
+                )
+            )
+            when (result) {
+                is Result.Success -> eventChannel.send(AddPinEvent.PinAdded)
+                is Result.Error -> {
+                    val error = when (result.error) {
+                        is DatabaseError.AlreadyExists -> AddPinError.PinAlreadyExists.asUiText()
+                        else -> AddPinError.UnknownError.asUiText()
+                    }
+                    eventChannel.send(AddPinEvent.Error(error))
                 }
             }
         }

@@ -65,8 +65,8 @@ private fun PinListScreen(
                 PinCard(
                     name = pin.name,
                     value = pin.pin,
-                    isPinVisible = pin.isVisible,
-                    onTogglePinVisibility = { onAction(PinListAction.PinVisibilityChanged(pin.name, !pin.isVisible)) },
+                    isPinVisible = pin.isMasked,
+                    onTogglePinVisibility = { onAction(PinListAction.PinVisibilityChanged(pin.name, !pin.isMasked)) },
                     onDelete = { onAction(PinListAction.DeletePinClicked(pin.name)) }
                 )
             }

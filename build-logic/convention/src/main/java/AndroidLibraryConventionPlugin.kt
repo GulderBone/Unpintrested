@@ -15,7 +15,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             pluginManager.run {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
-                apply("unpintrested.android.hilt")
             }
 
             extensions.configure<LibraryExtension> {
