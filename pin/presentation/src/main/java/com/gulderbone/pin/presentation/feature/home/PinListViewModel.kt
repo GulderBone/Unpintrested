@@ -28,7 +28,11 @@ class PinListViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             pinRepository.getPins().collect { pins ->
-                state = state.copy(pins = pins.map(pinUiMapper::from))
+                state = state.copy(
+                    pins = pins
+                        .map(pinUiMapper::from)
+                        .sortedBy { it.name.lowercase() }
+                )
             }
         }
     }

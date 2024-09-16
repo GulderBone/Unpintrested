@@ -13,4 +13,7 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="delete_pin">Delete \"%1$s\"</string>
+    <string name="add_new_pin">Add new pin</string>
+    <string name="name_cannot_be_empty">Name cannot be empty</string>
+    <string name="pin_added">Pin added: %1$s</string>
 </resources>

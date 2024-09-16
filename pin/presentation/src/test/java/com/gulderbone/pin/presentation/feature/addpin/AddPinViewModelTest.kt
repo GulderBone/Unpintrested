@@ -92,7 +92,7 @@ internal class AddPinViewModelTest {
 
             // THEN
             viewModel.events.test {
-                assertEquals(AddPinEvent.PinAdded, awaitItem())
+                assertEquals(AddPinEvent.PinAdded(newName), awaitItem())
             }
         }
 

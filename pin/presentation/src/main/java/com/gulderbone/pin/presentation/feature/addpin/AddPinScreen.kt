@@ -64,8 +64,8 @@ fun AddPinScreenRoot(
             is AddPinEvent.PinAdded -> {
                 Toast.makeText(
                     context,
-                    "Pin added: ${event.pinName}",
-                    Toast.LENGTH_LONG
+                    context.getString(R.string.pin_added, event.pinName),
+                    Toast.LENGTH_SHORT
                 ).show()
                 onExit()
             }

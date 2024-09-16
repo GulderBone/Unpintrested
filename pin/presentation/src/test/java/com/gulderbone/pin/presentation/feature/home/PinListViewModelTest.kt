@@ -27,11 +27,11 @@ internal class PinListViewModelTest {
         // GIVEN
         val mockPin = mockk<Pin>()
         val mockPin2 = mockk<Pin>()
-        val mockPinUi = mockk<PinUi>()
-        val mockPinUi2 = mockk<PinUi>()
+        val fakePinUi = PinUi("name", "pin", false)
+        val fakePinUi2 = PinUi("name2", "pin2", false)
 
-        every { mockPinUiMapper.from(mockPin) } returns mockPinUi
-        every { mockPinUiMapper.from(mockPin2) } returns mockPinUi2
+        every { mockPinUiMapper.from(mockPin) } returns fakePinUi
+        every { mockPinUiMapper.from(mockPin2) } returns fakePinUi2
 
         every { mockPinRepository.getPins() } returns flowOf(listOf(mockPin, mockPin2))
 
@@ -39,7 +39,7 @@ internal class PinListViewModelTest {
         val viewModel = PinListViewModel(mockPinRepository, mockPinUiMapper)
 
         // THEN
-        assertEquals(listOf(mockPinUi, mockPinUi2), viewModel.state.pins)
+        assertEquals(listOf(fakePinUi, fakePinUi2), viewModel.state.pins)
     }
 
     @Nested
@@ -93,7 +93,43 @@ internal class PinListViewModelTest {
         }
 
         @Test
-        fun `deletes pin on delete-pin-clicked`() = runTest {
+        fun `updates state on delete-pin-clicked`() {
+            // GIVEN
+            val fakeName = "testedName"
+            val fakePin = "testedPin"
+            val fakePinUi = PinUi(
+                name = fakeName,
+                pin = fakePin,
+                isMasked = false
+            )
+
+            every { mockPinRepository.getPins() } returns flowOf(listOf(mockk()))
+            every { mockPinUiMapper.from(any()) } returns fakePinUi
+
+            val viewModel = PinListViewModel(mockPinRepository, mockPinUiMapper)
+
+            // WHEN
+            viewModel.onAction(PinListAction.DeletePinClicked(fakeName))
+
+            // THEN
+            assertEquals(
+                PinListState(
+                    isDeleting = true,
+                    deletedPinName = fakeName,
+                    pins = listOf(
+                        PinUi(
+                            name = fakeName,
+                            pin = fakePin,
+                            isMasked = false
+                        )
+                    )
+                ),
+                viewModel.state
+            )
+        }
+
+        @Test
+        fun `deletes pin on delete-pin-confirmed`() = runTest {
             // GIVEN
             val fakeName = "testedName"
             val fakePin = "testedPin"
@@ -111,9 +147,47 @@ internal class PinListViewModelTest {
 
             // WHEN
             viewModel.onAction(PinListAction.DeletePinClicked(fakeName))
+            viewModel.onAction(PinListAction.DeletePinConfirmed)
 
             // THEN
             assertEquals(emptyList<PinUi>(), viewModel.state.pins)
+        }
+
+        @Test
+        fun `updates state on delete-pin-dismissed`() {
+            // GIVEN
+            val fakeName = "testedName"
+            val fakePin = "testedPin"
+            val fakePinUi = PinUi(
+                name = fakeName,
+                pin = fakePin,
+                isMasked = false
+            )
+
+            every { mockPinRepository.getPins() } returns flowOf(listOf(mockk()))
+            every { mockPinUiMapper.from(any()) } returns fakePinUi
+
+            val viewModel = PinListViewModel(mockPinRepository, mockPinUiMapper)
+
+            // WHEN
+            viewModel.onAction(PinListAction.DeletePinClicked(fakeName))
+            viewModel.onAction(PinListAction.DeletePinDismissed)
+
+            // THEN
+            assertEquals(
+                PinListState(
+                    isDeleting = false,
+                    deletedPinName = "",
+                    pins = listOf(
+                        PinUi(
+                            name = fakeName,
+                            pin = fakePin,
+                            isMasked = false
+                        )
+                    )
+                ),
+                viewModel.state
+            )
         }
     }
 }

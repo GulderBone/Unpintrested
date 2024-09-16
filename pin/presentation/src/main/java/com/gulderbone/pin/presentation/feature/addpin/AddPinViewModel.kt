@@ -40,7 +40,13 @@ class AddPinViewModel @Inject constructor(
             }
 
             is AddPinAction.OnAddPinClick -> {
-                insertPin()
+                if (state.canAdd) {
+                    insertPin()
+                } else {
+                    viewModelScope.launch {
+                        eventChannel.send(AddPinEvent.Error(AddPinError.EmptyName.asUiText()))
+                    }
+                }
             }
 
             is AddPinAction.OnExit -> {
