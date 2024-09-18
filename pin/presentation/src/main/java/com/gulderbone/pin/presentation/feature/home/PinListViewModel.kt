@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gulderbone.core.domain.pin.PinRepository
 import com.gulderbone.core.domain.util.Result
+import com.gulderbone.core.presentation.ui.MutableEventFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,8 +22,8 @@ class PinListViewModel @Inject constructor(
     var state by mutableStateOf(PinListState())
         private set
 
-    private val eventChannel = Channel<PinListEvent>()
-    val events = eventChannel.receiveAsFlow()
+    private val _events = MutableEventFlow<PinListEvent>()
+    val events = _events.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -41,7 +41,7 @@ class PinListViewModel @Inject constructor(
         when (action) {
             is PinListAction.AddNewPinClicked -> {
                 viewModelScope.launch {
-                    eventChannel.send(PinListEvent.PinAdded)
+                    _events.emit((PinListEvent.PinAdded))
                 }
             }
 
@@ -88,7 +88,7 @@ class PinListViewModel @Inject constructor(
                 }
 
                 is Result.Error -> {
-                    eventChannel.send(PinListEvent.Error(PinListError.DeletingFailed.asUiText()))
+                    _events.emit(PinListEvent.Error(PinListError.DeletingFailed.asUiText()))
                     state.copy(
                         isDeleting = false,
                         deletedPinName = ""

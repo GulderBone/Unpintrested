@@ -9,10 +9,10 @@ import com.gulderbone.core.domain.pin.Pin
 import com.gulderbone.core.domain.pin.PinRepository
 import com.gulderbone.core.domain.util.DatabaseError
 import com.gulderbone.core.domain.util.Result
+import com.gulderbone.core.presentation.ui.MutableEventFlow
 import com.gulderbone.pin.domain.PinGenerator
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,8 +27,8 @@ class AddPinViewModel @Inject constructor(
     )
         private set
 
-    private val eventChannel = Channel<AddPinEvent>()
-    val events = eventChannel.receiveAsFlow()
+    private val eventChannel = MutableEventFlow<AddPinEvent>()
+    val events = eventChannel.asSharedFlow()
 
     fun onAction(action: AddPinAction) {
         when (action) {
@@ -44,14 +44,14 @@ class AddPinViewModel @Inject constructor(
                     insertPin()
                 } else {
                     viewModelScope.launch {
-                        eventChannel.send(AddPinEvent.Error(AddPinError.EmptyName.asUiText()))
+                        eventChannel.emit(AddPinEvent.Error(AddPinError.EmptyName.asUiText()))
                     }
                 }
             }
 
             is AddPinAction.OnExit -> {
                 viewModelScope.launch {
-                    eventChannel.send(AddPinEvent.Exit)
+                    eventChannel.emit(AddPinEvent.Exit)
                 }
             }
         }
@@ -66,13 +66,13 @@ class AddPinViewModel @Inject constructor(
                 )
             )
             when (result) {
-                is Result.Success -> eventChannel.send(AddPinEvent.PinAdded(state.name))
+                is Result.Success -> eventChannel.emit(AddPinEvent.PinAdded(state.name))
                 is Result.Error -> {
                     val error = when (result.error) {
                         is DatabaseError.AlreadyExists -> AddPinError.PinAlreadyExists.asUiText()
                         else -> AddPinError.UnknownError.asUiText()
                     }
-                    eventChannel.send(AddPinEvent.Error(error))
+                    eventChannel.emit(AddPinEvent.Error(error))
                 }
             }
         }
