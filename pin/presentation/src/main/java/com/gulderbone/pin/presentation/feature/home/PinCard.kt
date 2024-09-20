@@ -30,7 +30,7 @@ fun PinCard(
     val formattedPinValue = if (isPinVisible) {
         value.toCharArray().joinToString(" ")
     } else {
-        "* * * * * *"
+        "● ● ● ● ● ●"
     }
 
     Row(
