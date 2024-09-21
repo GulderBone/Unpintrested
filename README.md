@@ -1,3 +1,5 @@
+# I'm working on the auth part as an additional feature (for a reviewer: feel free to ask me about it)
+
 # Unpintrested
 <p align="center">
    <img src="https://github.com/user-attachments/assets/5e7abe4b-f37d-4d7c-99d9-4cbd60514b5a" width="256" height="256"> </br>
