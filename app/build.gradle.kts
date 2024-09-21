@@ -50,6 +50,8 @@ dependencies {
     implementation(projects.core.presentation.designsystem)
     implementation(projects.core.presentation.ui)
 
+    implementation(projects.auth.presentation)
+
     implementation(projects.pin.presentation)
     implementation(projects.pin.domain)
     implementation(projects.pin.data)
