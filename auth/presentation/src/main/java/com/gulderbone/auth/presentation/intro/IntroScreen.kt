@@ -29,8 +29,8 @@ import com.gulderbone.core.presentation.designsystem.components.GradientBackgrou
 
 @Composable
 fun IntroScreenRoot(
-    onSignUpClick: () -> Unit,
     onSignInClick: () -> Unit,
+    onSignUpClick: () -> Unit,
     onContinueAsGuestClick: () -> Unit,
 ) {
     IntroScreen(
@@ -90,7 +90,7 @@ fun IntroScreen(
             Spacer(modifier = Modifier.size(32.dp))
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { IntroAction.OnSignInClick }) {
+                onClick = { onAction(IntroAction.OnSignUpClick) }) {
                 Text(
                     text = stringResource(R.string.sign_up),
                 )
@@ -98,7 +98,7 @@ fun IntroScreen(
             Spacer(modifier = Modifier.size(16.dp))
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { IntroAction.OnSignUpClick }) {
+                onClick = { onAction(IntroAction.OnSignInClick) }) {
                 Text(
                     text = stringResource(R.string.sign_in),
                 )
