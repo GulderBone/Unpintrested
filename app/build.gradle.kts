@@ -37,6 +37,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.ui.tooling)
 
+    implementation(libs.androidx.security.crypto.ktx)
+
     implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)

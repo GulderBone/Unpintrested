@@ -1,6 +1,7 @@
 package com.gulderbone.pin.presentation.feature.addpin
 
 import app.cash.turbine.test
+import com.gulderbone.core.domain.SessionStorage
 import com.gulderbone.core.domain.pin.Pin
 import com.gulderbone.core.domain.pin.PinRepository
 import com.gulderbone.core.domain.util.DatabaseError
@@ -23,6 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 internal class AddPinViewModelTest {
 
     private val mockPinRepository = mockk<PinRepository>()
+    private val mockSessionStorage = mockk<SessionStorage>()
     private val mockPinGenerator = mockk<PinGenerator>()
 
     @Test
@@ -32,7 +34,11 @@ internal class AddPinViewModelTest {
         every { mockPinGenerator.generate() } returns fakePin
 
         // WHEN
-        val viewModel = AddPinViewModel(mockPinRepository, mockPinGenerator)
+        val viewModel = AddPinViewModel(
+            pinRepository = mockPinRepository,
+            sessionStorage = mockSessionStorage,
+            pinGenerator = mockPinGenerator,
+        )
 
         // THEN
         assertEquals(fakePin, viewModel.state.pin)
@@ -50,7 +56,11 @@ internal class AddPinViewModelTest {
             every { mockPinGenerator.generate() } returns fakePin
 
             // WHEN
-            val viewModel = AddPinViewModel(mockPinRepository, mockPinGenerator)
+            val viewModel = AddPinViewModel(
+                pinRepository = mockPinRepository,
+                sessionStorage = mockSessionStorage,
+                pinGenerator = mockPinGenerator,
+            )
             viewModel.onAction(AddPinAction.OnPinNameChange(newName))
 
             // THEN
@@ -61,14 +71,23 @@ internal class AddPinViewModelTest {
         fun `saves pin on on-add-pin-click`() = runTest {
             // GIVEN
             val newName = "testedName"
-            val fakeValue = 123456L
-            val fakePin = Pin(name = newName, value = fakeValue)
+            val fakeValue = 1L
+            val fakeUserId = 2L
+            val fakePin = Pin(
+                name = newName,
+                value = fakeValue,
+                userId = fakeUserId,
+            )
 
             every { mockPinGenerator.generate() } returns fakeValue
             coEvery { mockPinRepository.insertPin(fakePin) } returns Result.Success(Unit)
 
             // WHEN
-            val viewModel = AddPinViewModel(mockPinRepository, mockPinGenerator)
+            val viewModel = AddPinViewModel(
+                pinRepository = mockPinRepository,
+                sessionStorage = mockSessionStorage,
+                pinGenerator = mockPinGenerator,
+            )
             viewModel.onAction(AddPinAction.OnPinNameChange(newName))
             viewModel.onAction(AddPinAction.OnAddPinClick)
 
@@ -80,13 +99,17 @@ internal class AddPinViewModelTest {
         fun `sends pin-added event on successful on-add-pin-click`() = runTest {
             // GIVEN
             val newName = "testedName"
-            val fakePin = 123456L
+            val fakePin = 1L
 
             every { mockPinGenerator.generate() } returns fakePin
             coEvery { mockPinRepository.insertPin(any()) } returns Result.Success(Unit)
 
             // WHEN
-            val viewModel = AddPinViewModel(mockPinRepository, mockPinGenerator)
+            val viewModel = AddPinViewModel(
+                pinRepository = mockPinRepository,
+                sessionStorage = mockSessionStorage,
+                pinGenerator = mockPinGenerator,
+            )
             viewModel.onAction(AddPinAction.OnPinNameChange(newName))
             viewModel.onAction(AddPinAction.OnAddPinClick)
 
@@ -110,7 +133,11 @@ internal class AddPinViewModelTest {
             every { AddPinError.PinAlreadyExists.asUiText() } returns mockUiText
 
             // WHEN
-            val viewModel = AddPinViewModel(mockPinRepository, mockPinGenerator)
+            val viewModel = AddPinViewModel(
+                pinRepository = mockPinRepository,
+                sessionStorage = mockSessionStorage,
+                pinGenerator = mockPinGenerator,
+            )
             viewModel.onAction(AddPinAction.OnPinNameChange(newName))
             viewModel.onAction(AddPinAction.OnAddPinClick)
 
@@ -129,7 +156,11 @@ internal class AddPinViewModelTest {
             every { mockPinGenerator.generate() } returns fakePin
 
             // WHEN
-            val viewModel = AddPinViewModel(mockPinRepository, mockPinGenerator)
+            val viewModel = AddPinViewModel(
+                pinRepository = mockPinRepository,
+                sessionStorage = mockSessionStorage,
+                pinGenerator = mockPinGenerator,
+            )
             viewModel.onAction(AddPinAction.OnPinNameChange(newName))
             viewModel.onAction(AddPinAction.OnExit)
 

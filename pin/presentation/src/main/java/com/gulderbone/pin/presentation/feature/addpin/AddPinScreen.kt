@@ -46,6 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.gulderbone.core.presentation.designsystem.ScreenThemePreviews
 import com.gulderbone.core.presentation.designsystem.UnpintrestedTheme
 import com.gulderbone.core.presentation.ui.ObserveAsEvents
+import com.gulderbone.core.presentation.ui.UiText
 import com.gulderbone.pin.presentation.R
 
 @Composable
@@ -58,15 +59,11 @@ fun AddPinScreenRoot(
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
             is AddPinEvent.Error -> {
-                displayErrorToast(context, event)
+                displayErrorToast(context, event.error)
             }
 
             is AddPinEvent.PinAdded -> {
-                Toast.makeText(
-                    context,
-                    context.getString(R.string.pin_added, event.pinName),
-                    Toast.LENGTH_SHORT
-                ).show()
+                displayPinAddedToast(context, event.pinName)
                 onExit()
             }
 
@@ -183,11 +180,19 @@ private fun GeneratedPinUi(pinValue: Long) {
     }
 }
 
-private fun displayErrorToast(context: Context, event: AddPinEvent.Error) {
+private fun displayErrorToast(context: Context, error: UiText) {
     Toast.makeText(
         context,
-        event.error.asString(context),
+        error.asString(context),
         Toast.LENGTH_LONG
+    ).show()
+}
+
+private fun displayPinAddedToast(context: Context, pinName: String) {
+    Toast.makeText(
+        context,
+        context.getString(R.string.pin_added, pinName),
+        Toast.LENGTH_SHORT
     ).show()
 }
 
