@@ -29,8 +29,8 @@ class AddPinViewModel @Inject constructor(
     )
         private set
 
-    private val eventChannel = MutableEventFlow<AddPinEvent>()
-    val events = eventChannel.asSharedFlow()
+    private val _events = MutableEventFlow<AddPinEvent>()
+    val events = _events.asSharedFlow()
 
     fun onAction(action: AddPinAction) {
         when (action) {
@@ -46,14 +46,14 @@ class AddPinViewModel @Inject constructor(
                     insertPin()
                 } else {
                     viewModelScope.launch {
-                        eventChannel.emit(AddPinEvent.Error(AddPinError.EmptyName.asUiText()))
+                        _events.emit(AddPinEvent.Error(AddPinError.EmptyName.asUiText()))
                     }
                 }
             }
 
             is AddPinAction.OnExit -> {
                 viewModelScope.launch {
-                    eventChannel.emit(AddPinEvent.Exit)
+                    _events.emit(AddPinEvent.Exit)
                 }
             }
         }
@@ -69,13 +69,13 @@ class AddPinViewModel @Inject constructor(
                 )
             )
             when (result) {
-                is Result.Success -> eventChannel.emit(AddPinEvent.PinAdded(state.name))
+                is Result.Success -> _events.emit(AddPinEvent.PinAdded(state.name))
                 is Result.Error -> {
                     val error = when (result.error) {
                         is DatabaseError.AlreadyExists -> AddPinError.PinAlreadyExists.asUiText()
                         else -> AddPinError.UnknownError.asUiText()
                     }
-                    eventChannel.emit(AddPinEvent.Error(error))
+                    _events.emit(AddPinEvent.Error(error))
                 }
             }
         }
