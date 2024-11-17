@@ -10,8 +10,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 internal interface PinDao {
 
+    @Query("SELECT * FROM pinentity WHERE LOWER(name) = LOWER(:name)")
+    suspend fun getPin(name: String): PinEntity?
+
     @Query("SELECT * FROM pinentity ORDER BY name ASC")
     fun getPins(): Flow<List<PinEntity>>
+
+    @Query("SELECT * FROM pinentity WHERE userId = :userId ORDER BY name ASC")
+    fun getUserPins(userId: Long): Flow<List<PinEntity>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertPin(pin: PinEntity)

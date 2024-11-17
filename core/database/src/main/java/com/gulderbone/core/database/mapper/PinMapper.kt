@@ -10,6 +10,7 @@ internal class PinMapper @Inject constructor() {
         Pin(
             name = name,
             value = value,
+            userId = userId,
         )
     }
 }

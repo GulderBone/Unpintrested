@@ -26,9 +26,15 @@ internal class RoomLocalPinDataSource @Inject constructor(
         }
 
     override suspend fun insertPin(pin: Pin): EmptyResult<DatabaseError> = try {
-        val entity = pinEntityMapper.from(pin)
-        pinDao.insertPin(entity)
-        Result.Success(Unit)
+        val existingPin = pinDao.getPin(pin.name.trim())
+
+        if (existingPin != null) {
+            Result.Error(DatabaseError.AlreadyExists)
+        } else {
+            val entity = pinEntityMapper.from(pin)
+            pinDao.insertPin(entity)
+            Result.Success(Unit)
+        }
     } catch (e: SQLiteConstraintException) {
         Result.Error(DatabaseError.AlreadyExists)
     }

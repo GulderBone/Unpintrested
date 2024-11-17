@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gulderbone.core.domain.SessionStorage
 import com.gulderbone.core.domain.pin.Pin
 import com.gulderbone.core.domain.pin.PinRepository
 import com.gulderbone.core.domain.util.DatabaseError
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddPinViewModel @Inject constructor(
     private val pinRepository: PinRepository,
+    private val sessionStorage: SessionStorage,
     pinGenerator: PinGenerator,
 ) : ViewModel() {
 
@@ -63,6 +65,7 @@ class AddPinViewModel @Inject constructor(
                 Pin(
                     name = state.name,
                     value = state.pin,
+                    userId = sessionStorage.get()?.userId ?: throw IllegalStateException("User not logged in")
                 )
             )
             when (result) {

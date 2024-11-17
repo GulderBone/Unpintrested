@@ -13,10 +13,12 @@ internal class PinEntityMapperTest {
     fun `maps from pin`() {
         // GIVEN
         val fakeName = "testedName"
-        val fakePin: Long = 123456
+        val fakePin: Long = 1
+        val fakeUserId: Long = 2
         val pin = Pin(
             name = fakeName,
-            value = fakePin
+            value = fakePin,
+            userId = fakeUserId,
         )
 
         // WHEN
@@ -25,7 +27,8 @@ internal class PinEntityMapperTest {
         // THEN
         val expected = PinEntity(
             name = fakeName,
-            value = fakePin
+            value = fakePin,
+            userId = fakeUserId,
         )
         assertEquals(expected, entity)
     }
