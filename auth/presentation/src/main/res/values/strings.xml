@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unpintrested">Unpintrested</string>
+    <string name="welcome_to_unpintrested">Welcome to Unpintrested</string>
+    <string name="unpintrested_description">Unpintrested is a safe place to store your pins locally.</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+    <string name="continue_as_guest">Continue as Guest</string>
+    <string name="already_have_an_account">Already have an account</string>
+    <string name="login">Login</string>
+    <string name="error_login_exists">A user with that email already exists</string>
+    <string name="could_not_register_unknown_error">Could not register, unknown error.</string>
+</resources>
